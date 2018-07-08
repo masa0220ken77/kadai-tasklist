@@ -57,3 +57,6 @@ group :production do
 end
 
 gem 'kaminari'
+gem 'pry-rails'
+gem 'pry-byebug'
+gem 'pry-doc'
