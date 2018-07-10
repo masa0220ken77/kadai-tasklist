@@ -1,6 +1,8 @@
 class TasksController < ApplicationController
   before_action :require_user_logged_in
   before_action :set_task, only: [:show, :edit, :update, :destroy]
+  before_action :login_check, only: [:show, :edit, :update, :destroy]
+  
   def index
     @tasks = current_user.tasks
   end
@@ -36,7 +38,7 @@ class TasksController < ApplicationController
       render :edit
     end
   end
-
+  
   def destroy
     @task.destroy
 
@@ -45,12 +47,17 @@ class TasksController < ApplicationController
   end
 
   def set_task
-    @task = Task.find(params[:id])
+    @task = current_user.tasks.find_by(id: params[:id])
   end
 
   # Strong Parameter
   def task_params
     params.require(:task).permit(:content, :status, :userid)
   end  
-
+  
+  def login_check
+    if @task.nil?
+      redirect_to root_path
+    end
+  end
 end
